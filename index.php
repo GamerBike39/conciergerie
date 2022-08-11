@@ -21,7 +21,7 @@ var_dump($_SESSION['login_user']);
                     <section>
                         <!-- <?php login() ?> -->
                         <button type="submit" name="action" value="login">Login</button>
-                        <a href="register.php">Register</a>
+
                     </section>
                 </form>
 </main>
