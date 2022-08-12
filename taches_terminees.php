@@ -7,6 +7,7 @@ else{
     header('Location: ./index.php');
 }
 include_once 'includes/header.php';
+include_once 'includes/navbar.php';
 include_once 'includes/co.php';
 
 
@@ -24,7 +25,7 @@ $date = $_POST["date"];
 
 
 // on écrit la requete
-$sql = "INSERT INTO `tache_faite` (`id_tache_faite`, `tache_faite`, `date`, `etage`, `numero_appartement`) VALUES (NULL, 'changement du syphon', '2022-08-24', '3', '2')";
+$sql = "INSERT INTO `tache_faite` (`tache_faite`, `date`, `etage`, `numero_appartement`) VALUES (NULL, :tache, :dateIntervention, :etage, :numero_appartement)";
 $query = $db->prepare($sql);
 $query->bindValue(":tache", $tache_faite, PDO::PARAM_STR);
 $query->bindValue(":etage", $etage, PDO::PARAM_INT);
@@ -63,18 +64,19 @@ $tache_faite = $query->fetchAll();
         </form>
     </div>
 </div>
-<?php foreach ($tache_faite as $tacheF) : ?>
-<article>
-    <div class="metadata">
-        <p> Taches effectuées : <?= strip_tags($tacheF['tache_faite']) ?></p>
-        <p> étage numéro : <?= strip_tags($tacheF['etage']) ?></p>
-        <p> Appartement numéro <?= strip_tags($tacheF['numero_appartement']) ?> </p>
-        <p> Le <?= strip_tags($tacheF['date']) ?></p>
-    </div>
-    <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
-</article>
-<?php endforeach; ?>
-
+<div class="article">
+    <?php foreach ($tache_faite as $tacheF) : ?>
+    <article>
+        <div class="metadata">
+            <p> Taches effectuées : <?= strip_tags($tacheF['tache_faite']) ?></p>
+            <p> étage numéro : <?= strip_tags($tacheF['etage']) ?></p>
+            <p> Appartement numéro <?= strip_tags($tacheF['numero_appartement']) ?> </p>
+            <p> Le <?= strip_tags($tacheF['date']) ?></p>
+        </div>
+        <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
+    </article>
+    <?php endforeach; ?>
+</div>
 <?php
 include_once 'includes/footer.php';
 ?>

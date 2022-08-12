@@ -7,6 +7,7 @@ else{
     header('Location: ./index.php');
 }
 include_once 'includes/header.php';
+include_once 'includes/navbar.php';
 include_once 'includes/co.php';
 
 
@@ -34,7 +35,8 @@ if(!$query->execute()){
     die ("Erreur lors de l'insertion");
 }
 $id = $db->lastInsertId();
-die ("taches ajoutée avec succès sous le numéro $id");
+// Retourne l'identifiant de la dernière ligne insérée ou la valeur d'une séquence 
+echo "taches ajoutée avec succès sous le numéro $id";
     }
     else{
         die("le formulaire est incomplet");
@@ -48,43 +50,57 @@ $tache_a_faire = $query->fetchAll();
 ?>
 <div class="container mt-5">
     <div class="row">
-        <!-- <div class="col-12 row">
-            <form action="concierge.php" method="post" class="col-4">
-                <h1>Résident</h1>
-                <div class="form-group">
-                    <label for="name">Nom</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Nom" required>
-                    <label for="etage">etage</label>
-                    <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required
-                        min="-1">
-                    <label for="num_appartement">numéro appartement</label>
-                    <input type="number" class="form-control" id="num_appartement" name="num_appartement"
-                        placeholder="numéro appartement" min="0" required>
-                    <label for="date">Date</label>
-                    <input type="date" class="form-control" id="date" name="date">
-                </div>
-                <button type="submit" class="btn btn-primary">Verifier</button>
+        <div class="col-12 row">
+            <!-- <form action="concierge.php" method="post" class="col-4">
+            <h1>Résident</h1>
+            <div class="form-group">
+                <label for="name">Nom</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Nom" required>
+                <label for="etage">etage</label>
+                <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required min="-1">
+                <label for="num_appartement">numéro appartement</label>
+                <input type="number" class="form-control" id="num_appartement" name="num_appartement"
+                    placeholder="numéro appartement" min="0" required>
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date" name="date">
+            </div>
+            <button type="submit" class="btn btn-primary">Verifier</button>
             </form> -->
-        <div>
-            <form action="concierge.php" method="post" class="col-4">
-                <h1>Taches à faire</h1>
-                <div class="form-group">
-                    <label for="tache">tache</label>
-                    <input type="textarea" class="form-control" id="tache" name="tache" placeholder="tache" required>
-                    <label for="etage">étage</label>
-                    <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required
-                        min="-1" max="10">
-                    <label for="numero_appartement">numéro appartement</label>
-                    <input type="number" class="form-control" id="numero_appartement" name="numero_appartement"
-                        placeholder="numéro appartement" min="0" max="10" required>
-                    <label for="date">Date</label>
-                    <input type="date" class="form-control" id="date" name="date">
+            <div>
+                <form action="concierge.php" method="post" class="col-4">
+                    <h1>Taches à faire</h1>
+                    <div class="form-group">
+                        <label for="tache">tache</label>
+                        <input type="textarea" class="form-control" id="tache" name="tache" placeholder="tache"
+                            required>
+                        <label for="etage">étage</label>
+                        <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required
+                            min="-1" max="10">
+                        <label for="numero_appartement">numéro appartement</label>
+                        <input type="number" class="form-control" id="numero_appartement" name="numero_appartement"
+                            placeholder="numéro appartement" min="1" max="5" required>
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
+                <div>
+                    <?php foreach ($tache_a_faire as $tache) : ?>
+                    <article>
+                        <div class="metadata">
+                            <p> Tache à effectuer : <?= strip_tags($tache['tache']) ?></p>
+                            <div>
+                                <p> étage numéro : <?= strip_tags($tache['etage']) ?>
+                                    Appartement numéro <?= strip_tags($tache['numero_appartement']) ?> </p>
+                            </div>
+                            <p> Le <?= strip_tags($tache['date']) ?></p>
+                        </div>
+                        <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
+                    </article>
+                    <?php endforeach; ?>
                 </div>
-                <button type="submit" class="btn btn-primary">Ajouter</button>
-            </form>
-
-        </div>
-        <!-- <form action="concierge.php" method="post" class="col-4">
+            </div>
+            <!-- <form action="concierge.php" method="post" class="col-4">
                 <h1>Taches faites</h1>
                 <div class="form-group">
                     <label for="etage">etage</label>
@@ -98,20 +114,10 @@ $tache_a_faire = $query->fetchAll();
                 </div>
                 <button type="submit" class="btn btn-primary">Verifier</button>
             </form> -->
+        </div>
     </div>
-</div>
-<?php foreach ($tache_a_faire as $tache) : ?>
-<article>
-    <div class="metadata">
-        <p> Tache à effectuer : <?= strip_tags($tache['tache']) ?></p>
-        <p> étage numéro : <?= strip_tags($tache['etage']) ?></p>
-        <p> Appartement numéro <?= strip_tags($tache['numero_appartement']) ?> </p>
-        <p> Le <?= strip_tags($tache['date']) ?></p>
-    </div>
-    <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
-</article>
-<?php endforeach; ?>
 
-<?php
+
+    <?php
 include_once 'includes/footer.php';
 ?>
