@@ -62,20 +62,22 @@ $tache_faite = $query->fetchAll();
             </div>
             <button type="submit" class="btn btn-primary">Verifier</button>
         </form>
-    </div>
-</div>
-<div class="article">
-    <?php foreach ($tache_faite as $tacheF) : ?>
-    <article>
-        <div class="metadata">
-            <p> Taches effectuées : <?= strip_tags($tacheF['tache_faite']) ?></p>
-            <p> étage numéro : <?= strip_tags($tacheF['etage']) ?></p>
-            <p> Appartement numéro <?= strip_tags($tacheF['numero_appartement']) ?> </p>
-            <p> Le <?= strip_tags($tacheF['date']) ?></p>
+
+
+        <div class="article">
+            <?php foreach ($tache_faite as $tacheF) : ?>
+            <article>
+                <div class="metadata">
+                    <p> Taches effectuées : <?= strip_tags($tacheF['tache_faite']) ?></p>
+                    <p> étage numéro : <?= strip_tags($tacheF['etage']) ?></p>
+                    <p> Appartement numéro <?= strip_tags($tacheF['numero_appartement']) ?> </p>
+                    <p> Le <?= strip_tags($tacheF['date']) ?></p>
+                </div>
+                <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
+            </article>
+            <?php endforeach; ?>
         </div>
-        <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
-    </article>
-    <?php endforeach; ?>
+    </div>
 </div>
 <?php
 include_once 'includes/footer.php';
