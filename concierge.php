@@ -15,19 +15,21 @@ include_once 'includes/co.php';
 if(!empty($_POST)){
     // post n'est pas vide, on vérifie que toutes les données sont présentes
     if (
-        isset($_POST["tache"], $_POST["etage"], $_POST["numero_appartement"], $_POST["date"])
-       && !empty($_POST["tache"]) && !empty($_POST["etage"]) && !empty($_POST["numero_appartement"]) && !empty($_POST["date"])
+        isset($_POST["tache"],$_POST["nom_resident"], $_POST["etage"], $_POST["numero_appartement"], $_POST["date"])
+       && !empty($_POST["tache"]) && !empty($_POST["nom_resident"]) && !empty($_POST["etage"]) && !empty($_POST["numero_appartement"]) && !empty($_POST["date"])
     ){
 $tache = $_POST["tache"];
+$nom_resident = $_POST["nom_resident"];
 $etage = $_POST["etage"];
 $num_appartement = $_POST["numero_appartement"];
 $date = $_POST["date"];
 
 
 // on écrit la requete
-$sql = "INSERT INTO `tache_a_faire` (`tache`, `etage`, `numero_appartement`, `date`) VALUES (:tache, :etage, :numero_appartement, :dateIntervention)";
+$sql = "INSERT INTO `tache_a_faire` (`tache`,`nom_resident`, `etage`, `numero_appartement`, `date`) VALUES (:tache, :nom_resident, :etage, :numero_appartement, :dateIntervention)";
 $query = $db->prepare($sql);
 $query->bindValue(":tache", $tache, PDO::PARAM_STR);
+$query->bindValue(":nom_resident", $nom_resident, PDO::PARAM_STR);
 $query->bindValue(":etage", $etage, PDO::PARAM_INT);
 $query->bindValue(":numero_appartement", $num_appartement, PDO::PARAM_INT);
 $query->bindValue(":dateIntervention", $date, PDO::PARAM_STR);
@@ -67,12 +69,15 @@ $tache_a_faire = $query->fetchAll();
             <button type="submit" class="btn btn-primary">Verifier</button>
             </form> -->
             <div>
-                <form action="concierge.php" method="post" class="col-4">
+                <form method="post" class="col-4">
                     <h1>Taches à faire</h1>
                     <div class="form-group">
                         <label for="tache">tache</label>
                         <input type="textarea" class="form-control" id="tache" name="tache" placeholder="tache"
                             required>
+                        <label for="nom_resident">nom</label>
+                        <input type="text" class="form-control" id="nom_resident" name="nom_resident"
+                            placeholder="nom_resident" required>
                         <label for="etage">étage</label>
                         <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required
                             min="-1" max="10">
@@ -85,19 +90,43 @@ $tache_a_faire = $query->fetchAll();
                     <button type="submit" class="btn btn-primary">Ajouter</button>
                 </form>
                 <div>
-                    <?php foreach ($tache_a_faire as $tache) : ?>
-                    <article>
-                        <div class="metadata">
-                            <p> Tache à effectuer : <?= strip_tags($tache['tache']) ?></p>
-                            <div>
-                                <p> étage numéro : <?= strip_tags($tache['etage']) ?>
-                                    Appartement numéro <?= strip_tags($tache['numero_appartement']) ?> </p>
-                            </div>
-                            <p> Le <?= strip_tags($tache['date']) ?></p>
-                        </div>
-                        <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
-                    </article>
-                    <?php endforeach; ?>
+                    <!-- creer un tableau avec les valeurs du formulaire -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tache à effectuer</th>
+                                <th>Résident</th>
+                                <th>étage</th>
+                                <th>appartement</th>
+                                <th>Date</th>
+                                <th>Supprimer</th>
+                                <th>Terminée</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($tache_a_faire as $tache) : ?>
+                            <tr>
+                                <td><?= strip_tags($tache['tache']) ?></td>
+                                <td><?= strip_tags($tache['nom_resident']) ?></td>
+                                <td><?= strip_tags($tache['etage']) ?></td>
+                                <td><?= strip_tags($tache['numero_appartement']) ?></td>
+                                <td><?= strip_tags($tache['date']) ?></td>
+                                <td>
+                                    <form action="includes/delete.php" method="get">
+                                        <input type="hidden" name="id_tache" value="<?= $tache['id_tache'] ?>">
+                                        <input type="submit" value="Supprimer">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="includes/finish.php" method="get">
+                                        <input type="hidden" name="id_tache" value="<?= $tache['id_tache'] ?>">
+                                        <input type="submit" value="terminée">
+                                    </form>
+                                <td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- <form action="concierge.php" method="post" class="col-4">

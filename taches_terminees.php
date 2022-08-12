@@ -52,11 +52,13 @@ $tache_faite = $query->fetchAll();
         <form action="includes/co.php" method="post" class="col-4">
             <h1>Taches faites</h1>
             <div class="form-group">
+                <label for="nom_resident">nom_resident</label>
+                <input type="text" class="form-control" id="nom_resident" name="nom_resident">
                 <label for="etage">etage</label>
-                <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" required min="-1">
+                <input type="number" class="form-control" id="etage" name="etage" placeholder="etage" min="-1">
                 <label for="numero_appartement">numéro appartement</label>
                 <input type="number" class="form-control" id="numero_appartement" name="numero_appartement"
-                    placeholder="numéro appartement" min="0" required>
+                    placeholder="numéro appartement" min="0">
                 <label for="date">Date</label>
                 <input type="date" class="form-control" id="date" name="date">
             </div>
@@ -65,20 +67,57 @@ $tache_faite = $query->fetchAll();
 
 
         <div class="article">
-            <?php foreach ($tache_faite as $tacheF) : ?>
-            <article>
-                <div class="metadata">
-                    <p> Taches effectuées : <?= strip_tags($tacheF['tache_faite']) ?></p>
-                    <p> étage numéro : <?= strip_tags($tacheF['etage']) ?></p>
-                    <p> Appartement numéro <?= strip_tags($tacheF['numero_appartement']) ?> </p>
-                    <p> Le <?= strip_tags($tacheF['date']) ?></p>
-                </div>
-                <!-- strip_tags prévient de l'intégration de l'html, en gros c'est un textContent -->
-            </article>
-            <?php endforeach; ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tache à effectuer</th>
+                        <th>Résident</th>
+                        <th>étage</th>
+                        <th>appartement</th>
+                        <th>Date</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($tache_faite as $tacheF) : ?>
+                    <tr>
+                        <td><?= strip_tags($tacheF['tache_faite']) ?></td>
+                        <td><?= strip_tags($tacheF['nom_resident']) ?></td>
+                        <td><?= strip_tags($tacheF['etage']) ?></td>
+                        <td><?= strip_tags($tacheF['numero_appartement']) ?></td>
+                        <td><?= strip_tags($tacheF['date']) ?></td>
+                        <td>
+                            <form action="includes/deleteF.php" method="get">
+                                <input type="hidden" name="id_tache" value="<?= $tacheF['id_tache'] ?>">
+                                <input type="submit" value="Supprimer">
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 <?php
 include_once 'includes/footer.php';
 ?>
+
+<!-- recherche dans la base de donnée tache_faite depuis le formulaire -->
+<!-- SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%' AND `date` LIKE '%<?= $date ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%' AND `date` LIKE '%<?= $date ?>%' AND `nom_resident` LIKE '%<?= $nom_resident ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%' AND `date` LIKE '%<?= $date ?>%' AND `nom_resident` LIKE '%<?= $nom_resident ?>%' AND
+`id_tache` LIKE '%<?= $id_tache ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%' AND `date` LIKE '%<?= $date ?>%' AND `nom_resident` LIKE '%<?= $nom_resident ?>%' AND
+`id_tache` LIKE '%<?= $id_tache ?>%' AND `id_resident` LIKE '%<?= $id_resident ?>%'
+SELECT * FROM `tache_faite` WHERE AND `etage` LIKE '%<?= $etage ?>%' AND `numero_appartement` LIKE
+'%<?= $numero_appartement ?>%' AND `date` LIKE '%<?= $date ?>%' AND `nom_resident` LIKE '%<?= $nom_resident ?>%' AND
+`id_tache` LIKE '%<?= $id_tache ?>%' AND `id_resident` LIKE '%<?= $id_resident ?>%' AND `id_intervention` LIKE
+'%<?= $id_intervention ?>%' -->

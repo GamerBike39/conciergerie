@@ -7,8 +7,8 @@ var_dump($_SESSION['login_user']);
 <main>
     <div class="container">
         <div class="row">
-            <div class="col-12 row">
-                <form action="./includes/connect.php" method="post" class="col-12">
+            <div class="col-6 row">
+                <form action="./includes/connect.php" method="post" class="col-6">
                     <h1>Login</h1>
                     <div class="form-group">
                         <label for="username">Username:</label>
